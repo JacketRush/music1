@@ -58,8 +58,8 @@ enum NeoPixelColors {
     //% block=black
     Black = 0x000000
 }
-
-enum Note {
+//--------------------------------------------------------
+enum Note1 {
     //% blockIdentity=music.noteFrequency enumval=262
     C = 262,
     //% block=C#
@@ -553,7 +553,7 @@ namespace Banbao {
         let b = (rgb) & 0xFF;
         return b;
     }
-//-----------------------------
+//---------------------------------------------------------------------------
 /**
      * Plays a tone through pin ``P0`` for the given duration.
      * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
