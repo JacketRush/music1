@@ -187,7 +187,7 @@ enum BeatFraction1 {
     Breve = 64
 }
 
-enum MelodyOptions {
+enum MelodyOptions1 {
     //% block="once"
     Once = 1,
     //% block="forever"
@@ -200,11 +200,11 @@ enum MelodyOptions {
 
 enum MelodyStopOptions {
     //% block="all"
-    All = MelodyOptions.Once | MelodyOptions.OnceInBackground,
+    All = MelodyOptions1.Once | MelodyOptions1.OnceInBackground,
     //% block="foreground"
-    Foreground = MelodyOptions.Once,
+    Foreground = MelodyOptions1.Once,
     //% block="background"
-    Background = MelodyOptions.OnceInBackground
+    Background = MelodyOptions1.OnceInBackground
 }
 
 enum MusicEvent {
@@ -697,11 +697,11 @@ namespace Banbao {
     //% help=music/begin-melody weight=60 blockGap=16
     //% blockId=device_start_melody block="start melody %melody=device_builtin_melody| repeating %options"
     //% parts="headphone"
-    export function beginMelody(melodyArray: string[], options: MelodyOptions = 1) {
+    export function beginMelody(melodyArray: string[], options: MelodyOptions1 = 1) {
         init();
         if (currentMelody != undefined) {
-            if (((options & MelodyOptions.OnceInBackground) == 0)
-                && ((options & MelodyOptions.ForeverInBackground) == 0)
+            if (((options & MelodyOptions1.OnceInBackground) == 0)
+                && ((options & MelodyOptions1.ForeverInBackground) == 0)
                 && currentMelody.background) {
                 currentBackgroundMelody = currentMelody;
                 currentMelody = null;
@@ -741,9 +741,9 @@ namespace Banbao {
     //% parts="headphone"
     export function stopMelody(options: MelodyStopOptions) {
         if (options & MelodyStopOptions.Background)
-            beginMelody([], MelodyOptions.OnceInBackground);
+            beginMelody([], MelodyOptions1.OnceInBackground);
         if (options & MelodyStopOptions.Foreground)
-            beginMelody([], MelodyOptions.Once);
+            beginMelody([], MelodyOptions1.Once);
     }
 
     /**
@@ -814,12 +814,12 @@ namespace Banbao {
         public repeating: boolean;
         public background: boolean;
 
-        constructor(melodyArray: string[], options: MelodyOptions) {
+        constructor(melodyArray: string[], options: MelodyOptions1) {
             this.melodyArray = melodyArray;
-            this.repeating = ((options & MelodyOptions.Forever) != 0);
-            this.repeating = this.repeating ? true : ((options & MelodyOptions.ForeverInBackground) != 0)
-            this.background = ((options & MelodyOptions.OnceInBackground) != 0);
-            this.background = this.background ? true : ((options & MelodyOptions.ForeverInBackground) != 0);
+            this.repeating = ((options & MelodyOptions1.Forever) != 0);
+            this.repeating = this.repeating ? true : ((options & MelodyOptions1.ForeverInBackground) != 0)
+            this.background = ((options & MelodyOptions1.OnceInBackground) != 0);
+            this.background = this.background ? true : ((options & MelodyOptions1.ForeverInBackground) != 0);
             this.currentDuration = 4; //Default duration (Crotchet)
             this.currentOctave = 4; //Middle octave
             this.currentPos = 0;
