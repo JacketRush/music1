@@ -208,7 +208,7 @@ enum MelodyStopOptions {
 }
 
 enum MusicEvent {
-    //% block="melody note played"
+    //% block="melody note1 played"
     MelodyNotePlayed = 1,
     //% block="melody started"
     MelodyStarted = 2,
@@ -216,7 +216,7 @@ enum MusicEvent {
     MelodyEnded = 3,
     //% block="melody repeated"
     MelodyRepeated = 4,
-    //% block="background melody note played"
+    //% block="background melody note1 played"
     BackgroundMelodyNotePlayed = MelodyNotePlayed | 0xf0,
     //% block="background melody started"
     BackgroundMelodyStarted = MelodyStarted | 0xf0,
@@ -556,7 +556,7 @@ namespace Banbao {
 //---------------------------------------------------------------------------
 /**
      * Plays a tone through pin ``P0`` for the given duration.
-     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
+     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note1.C
      * @param ms tone duration in milliseconds (ms)
      */
     //% help=music/play-tone weight=90
@@ -570,7 +570,7 @@ namespace Banbao {
 
     /**
      * Plays a tone through pin ``P0``.
-     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
+     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note1.C
      */
     //% help=music/ring-tone weight=80
     //% blockId=device_ring block="ring tone (Hz)|%note=device_note" blockGap=8
@@ -593,16 +593,16 @@ namespace Banbao {
 
 
     /**
-     * Gets the frequency of a note.
-     * @param name the note name
+     * Gets the frequency of a note1.
+     * @param name the note1 name
      */
-    //% weight=50 help=music/note-frequency
+    //% weight=50 help=music/note1-frequency
     //% blockId=device_note block="%name"
     //% shim=TD_ID color="#FFFFFF" colorSecondary="#FFFFFF"
-    //% name.fieldEditor="note" name.defl="262"
+    //% name.fieldEditor="note1" name.defl="262"
     //% name.fieldOptions.decompileLiterals=true
     //% useEnumVal=1
-    export function noteFrequency(name: Note): number {
+    export function noteFrequency(name: Note1): number {
         return name;
     }
 
@@ -670,7 +670,7 @@ namespace Banbao {
 
     /**
      * Gets the melody array of a built-in melody.
-     * @param name the note name, eg: Note.C
+     * @param name the note name, eg: Note1.C
      */
     //% weight=50 help=music/builtin-melody
     //% blockId=device_builtin_melody block="%melody"
