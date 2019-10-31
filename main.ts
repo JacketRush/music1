@@ -555,13 +555,11 @@ namespace Banbao {
     }
 
  
+//----------------------------------------------------------------------------------
 
-
-
-    
 /**
      * Plays a tone through pin ``P0`` for the given duration.
-     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note1.C
+     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
      * @param ms tone duration in milliseconds (ms)
      */
     //% help=music/play-tone weight=90
@@ -575,7 +573,7 @@ namespace Banbao {
 
     /**
      * Plays a tone through pin ``P0``.
-     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note1.C
+     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
      */
     //% help=music/ring-tone weight=80
     //% blockId=device_ring block="ring tone (Hz)|%note=device_note" blockGap=8
@@ -598,16 +596,16 @@ namespace Banbao {
 
 
     /**
-     * Gets the frequency of a note1.
-     * @param name the note1 name
+     * Gets the frequency of a note.
+     * @param name the note name
      */
-    //% weight=50 help=music/note1-frequency
+    //% weight=50 help=music/note-frequency
     //% blockId=device_note block="%name"
     //% shim=TD_ID color="#FFFFFF" colorSecondary="#FFFFFF"
-    //% name.fieldEditor="note1" name.defl="262"
+    //% name.fieldEditor="note" name.defl="262"
     //% name.fieldOptions.decompileLiterals=true
     //% useEnumVal=1
-    export function noteFrequency(name: Note1): number {
+    export function noteFrequency(name: Note): number {
         return name;
     }
 
@@ -620,17 +618,17 @@ namespace Banbao {
      */
     //% help=music/beat weight=49
     //% blockId=device_beat block="%fraction|beat"
-    export function beat(fraction?: BeatFraction1): number {
+    export function beat(fraction?: BeatFraction): number {
         init();
-        if (fraction == null) fraction = BeatFraction1.Whole;
+        if (fraction == null) fraction = BeatFraction.Whole;
         let beat = Math.idiv(60000, beatsPerMinute);
         switch (fraction) {
-            case BeatFraction1.Half: return beat >> 1;
-            case BeatFraction1.Quarter: return beat >> 2;
-            case BeatFraction1.Eighth: return beat >> 3;
-            case BeatFraction1.Sixteenth: return beat >> 4;
-            case BeatFraction1.Double: return beat << 1;
-            case BeatFraction1.Breve: return beat << 2;
+            case BeatFraction.Half: return beat >> 1;
+            case BeatFraction.Quarter: return beat >> 2;
+            case BeatFraction.Eighth: return beat >> 3;
+            case BeatFraction.Sixteenth: return beat >> 4;
+            case BeatFraction.Double: return beat << 1;
+            case BeatFraction.Breve: return beat << 2;
             default: return beat;
         }
     }
@@ -675,7 +673,7 @@ namespace Banbao {
 
     /**
      * Gets the melody array of a built-in melody.
-     * @param name the note name, eg: Note1.C
+     * @param name the note name, eg: Note.C
      */
     //% weight=50 help=music/builtin-melody
     //% blockId=device_builtin_melody block="%melody"
@@ -689,7 +687,7 @@ namespace Banbao {
      */
     //% blockId=melody_on_event block="music on %value"
     //% help=music/on-event weight=59 blockGap=32
-    export function onEvent(value: MusicEvent1, handler: () => void) {
+    export function onEvent(value: MusicEvent, handler: () => void) {
         control.onEvent(MICROBIT_MELODY_ID, value, handler);
     }
 
@@ -702,23 +700,23 @@ namespace Banbao {
     //% help=music/begin-melody weight=60 blockGap=16
     //% blockId=device_start_melody block="start melody %melody=device_builtin_melody| repeating %options"
     //% parts="headphone"
-    export function beginMelody(melodyArray: string[], options: MelodyOptions1 = 1) {
+    export function beginMelody(melodyArray: string[], options: MelodyOptions = 1) {
         init();
         if (currentMelody != undefined) {
-            if (((options & MelodyOptions1.OnceInBackground) == 0)
-                && ((options & MelodyOptions1.ForeverInBackground) == 0)
+            if (((options & MelodyOptions.OnceInBackground) == 0)
+                && ((options & MelodyOptions.ForeverInBackground) == 0)
                 && currentMelody.background) {
                 currentBackgroundMelody = currentMelody;
                 currentMelody = null;
-                control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent1.BackgroundMelodyPaused);
+                control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent.BackgroundMelodyPaused);
             }
             if (currentMelody)
-                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyEnded : MusicEvent1.MelodyEnded);
+                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyEnded : MusicEvent.MelodyEnded);
             currentMelody = new Melody(melodyArray, options);
-            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyStarted : MusicEvent1.MelodyStarted);
+            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyStarted : MusicEvent.MelodyStarted);
         } else {
             currentMelody = new Melody(melodyArray, options);
-            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyStarted : MusicEvent1.MelodyStarted);
+            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyStarted : MusicEvent.MelodyStarted);
             // Only start the fiber once
             control.inBackground(() => {
                 while (currentMelody.hasNextNote()) {
@@ -727,11 +725,11 @@ namespace Banbao {
                         // Swap the background melody back
                         currentMelody = currentBackgroundMelody;
                         currentBackgroundMelody = null;
-                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent1.MelodyEnded);
-                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent1.BackgroundMelodyResumed);
+                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent.MelodyEnded);
+                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent.BackgroundMelodyResumed);
                     }
                 }
-                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyEnded : MusicEvent1.MelodyEnded);
+                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyEnded : MusicEvent.MelodyEnded);
                 currentMelody = null;
             })
         }
@@ -744,11 +742,11 @@ namespace Banbao {
     //% help=music/stop-melody weight=59 blockGap=16
     //% blockId=device_stop_melody block="stop melody $options"
     //% parts="headphone"
-    export function stopMelody(options: MelodyStopOptions1) {
-        if (options & MelodyStopOptions1.Background)
-            beginMelody([], MelodyOptions1.OnceInBackground);
-        if (options & MelodyStopOptions1.Foreground)
-            beginMelody([], MelodyOptions1.Once);
+    export function stopMelody(options: MelodyStopOptions) {
+        if (options & MelodyStopOptions.Background)
+            beginMelody([], MelodyOptions.OnceInBackground);
+        if (options & MelodyStopOptions.Foreground)
+            beginMelody([], MelodyOptions.Once);
     }
 
     /**
@@ -806,9 +804,9 @@ namespace Banbao {
         const repeating = melody.repeating && currentPos == melody.melodyArray.length - 1;
         melody.currentPos = repeating ? 0 : currentPos + 1;
 
-        control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent1.BackgroundMelodyNotePlayed : MusicEvent1.MelodyNotePlayed);
+        control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent.BackgroundMelodyNotePlayed : MusicEvent.MelodyNotePlayed);
         if (repeating)
-            control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent1.BackgroundMelodyRepeated : MusicEvent1.MelodyRepeated);
+            control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent.BackgroundMelodyRepeated : MusicEvent.MelodyRepeated);
     }
 
     class Melody {
@@ -819,12 +817,12 @@ namespace Banbao {
         public repeating: boolean;
         public background: boolean;
 
-        constructor(melodyArray: string[], options: MelodyOptions1) {
+        constructor(melodyArray: string[], options: MelodyOptions) {
             this.melodyArray = melodyArray;
-            this.repeating = ((options & MelodyOptions1.Forever) != 0);
-            this.repeating = this.repeating ? true : ((options & MelodyOptions1.ForeverInBackground) != 0)
-            this.background = ((options & MelodyOptions1.OnceInBackground) != 0);
-            this.background = this.background ? true : ((options & MelodyOptions1.ForeverInBackground) != 0);
+            this.repeating = ((options & MelodyOptions.Forever) != 0);
+            this.repeating = this.repeating ? true : ((options & MelodyOptions.ForeverInBackground) != 0)
+            this.background = ((options & MelodyOptions.OnceInBackground) != 0);
+            this.background = this.background ? true : ((options & MelodyOptions.ForeverInBackground) != 0);
             this.currentDuration = 4; //Default duration (Crotchet)
             this.currentOctave = 4; //Middle octave
             this.currentPos = 0;
@@ -839,5 +837,4 @@ namespace Banbao {
             return currentNote;
         }
     }
-
 }   
