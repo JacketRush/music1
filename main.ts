@@ -198,7 +198,7 @@ enum MelodyOptions1 {
     ForeverInBackground = 8
 }
 
-enum MelodyStopOptions {
+enum MelodyStopOptions1 {
     //% block="all"
     All = MelodyOptions1.Once | MelodyOptions1.OnceInBackground,
     //% block="foreground"
@@ -207,7 +207,7 @@ enum MelodyStopOptions {
     Background = MelodyOptions1.OnceInBackground
 }
 
-enum MusicEvent {
+enum MusicEvent1 {
     //% block="melody note1 played"
     MelodyNotePlayed = 1,
     //% block="melody started"
@@ -684,7 +684,7 @@ namespace Banbao {
      */
     //% blockId=melody_on_event block="music on %value"
     //% help=music/on-event weight=59 blockGap=32
-    export function onEvent(value: MusicEvent, handler: () => void) {
+    export function onEvent(value: MusicEvent1, handler: () => void) {
         control.onEvent(MICROBIT_MELODY_ID, value, handler);
     }
 
@@ -705,15 +705,15 @@ namespace Banbao {
                 && currentMelody.background) {
                 currentBackgroundMelody = currentMelody;
                 currentMelody = null;
-                control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent.BackgroundMelodyPaused);
+                control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent1.BackgroundMelodyPaused);
             }
             if (currentMelody)
-                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyEnded : MusicEvent.MelodyEnded);
+                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyEnded : MusicEvent1.MelodyEnded);
             currentMelody = new Melody(melodyArray, options);
-            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyStarted : MusicEvent.MelodyStarted);
+            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyStarted : MusicEvent1.MelodyStarted);
         } else {
             currentMelody = new Melody(melodyArray, options);
-            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyStarted : MusicEvent.MelodyStarted);
+            control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyStarted : MusicEvent1.MelodyStarted);
             // Only start the fiber once
             control.inBackground(() => {
                 while (currentMelody.hasNextNote()) {
@@ -722,11 +722,11 @@ namespace Banbao {
                         // Swap the background melody back
                         currentMelody = currentBackgroundMelody;
                         currentBackgroundMelody = null;
-                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent.MelodyEnded);
-                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent.BackgroundMelodyResumed);
+                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent1.MelodyEnded);
+                        control.raiseEvent(MICROBIT_MELODY_ID, MusicEvent1.BackgroundMelodyResumed);
                     }
                 }
-                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent.BackgroundMelodyEnded : MusicEvent.MelodyEnded);
+                control.raiseEvent(MICROBIT_MELODY_ID, currentMelody.background ? MusicEvent1.BackgroundMelodyEnded : MusicEvent1.MelodyEnded);
                 currentMelody = null;
             })
         }
@@ -739,10 +739,10 @@ namespace Banbao {
     //% help=music/stop-melody weight=59 blockGap=16
     //% blockId=device_stop_melody block="stop melody $options"
     //% parts="headphone"
-    export function stopMelody(options: MelodyStopOptions) {
-        if (options & MelodyStopOptions.Background)
+    export function stopMelody(options: MelodyStopOptions1) {
+        if (options & MelodyStopOptions1.Background)
             beginMelody([], MelodyOptions1.OnceInBackground);
-        if (options & MelodyStopOptions.Foreground)
+        if (options & MelodyStopOptions1.Foreground)
             beginMelody([], MelodyOptions1.Once);
     }
 
@@ -801,9 +801,9 @@ namespace Banbao {
         const repeating = melody.repeating && currentPos == melody.melodyArray.length - 1;
         melody.currentPos = repeating ? 0 : currentPos + 1;
 
-        control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent.BackgroundMelodyNotePlayed : MusicEvent.MelodyNotePlayed);
+        control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent1.BackgroundMelodyNotePlayed : MusicEvent1.MelodyNotePlayed);
         if (repeating)
-            control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent.BackgroundMelodyRepeated : MusicEvent.MelodyRepeated);
+            control.raiseEvent(MICROBIT_MELODY_ID, melody.background ? MusicEvent1.BackgroundMelodyRepeated : MusicEvent1.MelodyRepeated);
     }
 
     class Melody {
