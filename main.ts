@@ -170,7 +170,7 @@ enum Note {
     B5 = 988,
 }
 
-enum BeatFraction {
+enum BeatFraction1 {
     //% block=1
     Whole = 1,
     //% block="1/2"
@@ -615,17 +615,17 @@ namespace Banbao {
      */
     //% help=music/beat weight=49
     //% blockId=device_beat block="%fraction|beat"
-    export function beat(fraction?: BeatFraction): number {
+    export function beat(fraction?: BeatFraction1): number {
         init();
-        if (fraction == null) fraction = BeatFraction.Whole;
+        if (fraction == null) fraction = BeatFraction1.Whole;
         let beat = Math.idiv(60000, beatsPerMinute);
         switch (fraction) {
-            case BeatFraction.Half: return beat >> 1;
-            case BeatFraction.Quarter: return beat >> 2;
-            case BeatFraction.Eighth: return beat >> 3;
-            case BeatFraction.Sixteenth: return beat >> 4;
-            case BeatFraction.Double: return beat << 1;
-            case BeatFraction.Breve: return beat << 2;
+            case BeatFraction1.Half: return beat >> 1;
+            case BeatFraction1.Quarter: return beat >> 2;
+            case BeatFraction1.Eighth: return beat >> 3;
+            case BeatFraction1.Sixteenth: return beat >> 4;
+            case BeatFraction1.Double: return beat << 1;
+            case BeatFraction1.Breve: return beat << 2;
             default: return beat;
         }
     }
