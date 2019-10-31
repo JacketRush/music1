@@ -557,61 +557,7 @@ namespace Banbao {
  
 //----------------------------------------------------------------------------------
 
-/**
-     * Plays a tone through pin ``P0`` for the given duration.
-     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
-     * @param ms tone duration in milliseconds (ms)
-     */
-    //% help=music/play-tone weight=90
-    //% blockId=device_play_note block="play|tone %note=device_note|for %duration=device_beat" blockGap=8
-    //% parts="headphone"
-    //% useEnumVal=1
-    export function playTone(frequency: number, ms: number): void {
-        if (_playTone) _playTone(frequency, ms);
-        else pins.analogPitch(frequency, ms);
-    }
 
-    /**
-     * Plays a tone through pin ``P0``.
-     * @param frequency pitch of the tone to play in Hertz (Hz), eg: Note.C
-     */
-    //% help=music/ring-tone weight=80
-    //% blockId=device_ring block="ring tone (Hz)|%note=device_note" blockGap=8
-    //% parts="headphone"
-    //% useEnumVal=1
-    export function ringTone(frequency: number): void {
-        playTone(frequency, 0);
-    }
-
-    /**
-     * Rests (plays nothing) for a specified time through pin ``P0``.
-     * @param ms rest duration in milliseconds (ms)
-     */
-    //% help=music/rest weight=79
-    //% blockId=device_rest block="rest(ms)|%duration=device_beat"
-    //% parts="headphone"
-    export function rest(ms: number): void {
-        playTone(0, ms);
-    }
-
-
-    /**
-     * Gets the frequency of a note.
-     * @param name the note name
-     */
-    //% weight=50 help=music/note-frequency
-    //% blockId=device_note block="%name"
-    //% shim=TD_ID color="#FFFFFF" colorSecondary="#FFFFFF"
-    //% name.fieldEditor="note" name.defl="262"
-    //% name.fieldOptions.decompileLiterals=true
-    //% useEnumVal=1
-    export function noteFrequency(name: Note): number {
-        return name;
-    }
-
-    function init() {
-        if (beatsPerMinute <= 0) beatsPerMinute = 120;
-    }
 
     /**
      * Returns the duration of a beat in milli-seconds
