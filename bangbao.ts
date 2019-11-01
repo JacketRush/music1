@@ -668,17 +668,7 @@ namespace Banbao {
     let currentMelody: Melody;
     let currentBackgroundMelody: Melody;
 
-    /**
-     * Gets the melody array of a built-in melody.
-     * @param name the note name, eg: Note1.C
-     */
-    //% weight=50 help=music/builtin-melody
-    //% blockId=device_builtin_melody block="%melody"
-    //% blockHidden=true
-    export function builtInMelody(melody: Melodies): string[] {
-        return getMelody(melody);
-    }
-
+    
     /**
      * Registers code to run on various melody events
      */
